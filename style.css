@@ -77,7 +77,7 @@ main {
     z-index: 10;
 }
 
-/* Conteneur pour s'assurer que le SVG reste proportionnel */
+/* Conteneur pour assurer que le SVG reste proportionnel */
 .wrapper {
     width: 100%;
     height: 100%;
@@ -93,3 +93,75 @@ svg {
     width: auto;
     height: auto;
 }
+
+/* --- Style de l'overlay --------------------------------------------------- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9); /* Un peu plus sombre pour faire ressortir les images */
+    backdrop-filter: blur(15px);    /* Flou plus intense */
+    display: none;                 /* Est contrôlé par le JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;                 /* Doit être au dessus de tout */
+}
+
+.info-panel {
+    background: #000000;
+    border: 3px solid rgba(255, 255, 255, 0.6); 
+    padding: 60px;
+    color: white;
+    
+    /* PANNEAU PRESQUE PLEIN ÉCRAN */
+    width: 90%;
+    height: 85%;
+    
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+    overflow-y: auto; /* Permet de scroller si le contenu (images + texte) est trop grand */
+}
+
+.case-cliquable rect {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.case-cliquable rect:hover {
+    filter: brightness(0.4); 
+}
+
+/* Style pour les images dans le panneau */
+.info-panel img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.close-btn {
+    position: fixed; /* Reste visible même si on scroll le panneau */
+    top: 5vh;
+    right: 7vw;
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    color: black;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+}
+
+.close-btn:hover {
+    transform: scale(1.1);
+    background: white;
+}
+/* -------------------------------------------------------------------------- */
