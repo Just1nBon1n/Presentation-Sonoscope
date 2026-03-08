@@ -169,6 +169,8 @@ const contentData = {
       "PROBLÈME 3 : ",
       "- Les métadonnées brutes sont souvent imprécises",
       "- Environs 5% des chaonsons ne marchait pas",
+      "- Je doit utiliser un proxy (serveur intermédiaire) pour faire les requêtes à l'API Deezer, car elle ne supporte pas les requêtes directes depuis le navigateur (CORS).",
+      "CORS : Cross-Origin Resource Sharing - Mécanisme de sécurité qui bloque les requêtes vers des domaines différents de celui de la page web, nécessitant un proxy pour contourner cette restriction.", 
     ],
     images: ["images/image_deezer.png"],
   },
