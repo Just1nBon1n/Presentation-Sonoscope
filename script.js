@@ -267,6 +267,13 @@ function closeInfo() {
   });
 }
 
+// Fermer l'overlay avec la touche Échap (Escape)
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && isOverlayOpen) {
+    closeInfo();
+  }
+});
+
 // Fermer aussi si on clique en dehors du panneau blanc
 document.getElementById("info-overlay").addEventListener("click", (e) => {
   if (e.target.id === "info-overlay") closeInfo();
