@@ -3,6 +3,34 @@ let currentIndex = 0;
 let isAnimating = false;
 let isOverlayOpen = false;
 
+function animatePanelComponents(panel, delay = 1) {
+  if (!panel) return;
+
+  const svg = panel.querySelector("svg");
+  if (!svg) return;
+
+  const components = Array.from(svg.children).filter((element, index) => {
+    const tag = element.tagName.toLowerCase();
+    // Ignore l'arriere-plan (2 premiers noeuds) et les blocs non visuels.
+    return index >= 2 && tag !== "defs" && tag !== "style";
+  });
+
+  if (components.length === 0) return;
+
+  gsap.killTweensOf(components);
+  gsap.set(components, { clearProps: "all" });
+
+  gsap.from(components, {
+    opacity: 0,
+    scale: 0.8,
+    transformOrigin: "center",
+    duration: 1,
+    stagger: 0.03,
+    ease: "back.out(1.5)",
+    delay,
+  });
+}
+
 function changePanel(index, btn) {
   const panels = document.querySelectorAll(".panel");
   const currentPanel = document.querySelector(".panel.active");
@@ -57,26 +85,7 @@ function changePanel(index, btn) {
     },
   });
 
-  // 5. Animation interne du SVG (Panneau Flux)
-  if (index === 1) {
-    // Exclure les deux premiers (Logo et fond)
-    const components = "#panel-flux svg g > *:nth-child(n+3)";
-
-    gsap.killTweensOf(components);
-
-    // On réinitialise pour éviter les bugs si on clique plusieurs fois
-    gsap.set(components, { clearProps: "all" });
-
-    gsap.from(components, {
-      opacity: 0,
-      scale: 0.8,
-      transformOrigin: "center",
-      duration: 0.6,
-      stagger: 0.03,
-      ease: "back.out(1.5)",
-      delay: 1,
-    });
-  }
+  animatePanelComponents(targetPanel, 1);
 }
 
 // Gestion du scroll pour changer de panneau
@@ -96,6 +105,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const activePanel = document.querySelector(".panel.active");
   if (activePanel) {
     gsap.set(activePanel, { visibility: "visible", opacity: 1 });
+    animatePanelComponents(activePanel);
   }
 });
 // =============================================================================
@@ -112,9 +122,7 @@ const contentData = {
       "- Les DRM bloquent l'analyse du flux audio",
       "- Oblige un loopback",
     ],
-    images: [
-      "images/image_carteSon.png"
-    ],
+    images: ["images/image_carteSon.png"],
   },
   traitement: {
     title: "Moteur de Traitement",
@@ -150,19 +158,17 @@ const contentData = {
     text: [
       "- Utilise un pseudo Last.fm pour faire une requête via l'API Last.fm et récuperer le nom de la chanson et l'artiste",
     ],
-    images: [
-      "images/image_lastFm.png",
-    ],
+    images: ["images/image_lastFm.png"],
   },
   deezer: {
     title: "Deezer API",
     text: [
       "- Intégration de l'API Deezer pour récuperer la pochette de l'album et le ISRC",
       "- ISRC : Identifiant unique sur chaque morceau musicale (Ex : DJ1234567890)",
-      "- Un ISRC ouvre beaucoup de porte", 
+      "- Un ISRC ouvre beaucoup de porte",
       "PROBLÈME 3 : ",
       "- Les métadonnées brutes sont souvent imprécises",
-      "- Environs 5% des chaonsons ne marchait pas"
+      "- Environs 5% des chaonsons ne marchait pas",
     ],
     images: ["images/image_deezer.png"],
   },
@@ -178,9 +184,22 @@ const contentData = {
     text: [
       "- Reception du flux audio en temps réel",
       "- Reception de toute les métadonnées à chaque nouvelle chanson",
-      "- Création du rendu 3D" 
+      "- Création du rendu 3D",
     ],
     images: [],
+  },
+
+  evolution: {
+    title: "Évolution du projet",
+    text: [],
+    images: [
+      "images/image_evo.png",
+      "images/image_evo2.png",
+      "images/image_evo3.png",
+      "images/image_evo4.png",
+      "images/image_evo5.png",
+      "images/image_evo6.png",
+    ],
   },
 };
 
@@ -194,16 +213,22 @@ document.querySelectorAll(".case-cliquable").forEach((groupe) => {
 
       // Générer le HTML pour les textes (plusieurs balises <p>)
       const textHtml = data.text
-        .map(t => `<p style="font-family: sans-serif; font-size: 1.4rem; line-height: 1.6; opacity: 0.9; margin-bottom: 20px;">${t}</p>`)
+        .map(
+          (t) =>
+            `<p style="font-family: sans-serif; font-size: 1.4rem; line-height: 1.6; opacity: 0.9; margin-bottom: 20px;">${t}</p>`,
+        )
         .join("");
 
       // Générer le HTML pour les images
       const imagesHtml = data.images
-        .map(url => `
+        .map(
+          (url) => `
           <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 30px;">
             <img src="${url}" style="max-width: 100%; max-height: 500px; width: auto; height: auto; border-radius: 10px; border: 1px solid #333;">
           </div>
-        `).join("");
+        `,
+        )
+        .join("");
 
       document.getElementById("info-content").innerHTML = `
         <div class="modal-inner-content" style="width: 100%; margin: 0 auto;">
@@ -222,7 +247,11 @@ document.querySelectorAll(".case-cliquable").forEach((groupe) => {
       const overlay = document.getElementById("info-overlay");
       overlay.style.display = "flex";
       gsap.fromTo(overlay, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-      gsap.fromTo(".info-panel", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 });
+      gsap.fromTo(
+        ".info-panel",
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5 },
+      );
     }
   });
 });
