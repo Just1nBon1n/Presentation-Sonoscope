@@ -185,8 +185,8 @@ const contentData = {
   rendu: {
     title: "Rendu Three.js",
     text: [
-      "- Reception du flux audio en temps réel",
-      "- Reception de toute les métadonnées à chaque nouvelle chanson",
+      "- Réception du flux audio en temps réel",
+      "- Réception de toutes les métadonnées à chaque nouvelle chanson",
       "- Création du rendu 3D",
     ],
     images: [],
